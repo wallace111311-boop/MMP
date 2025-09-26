@@ -2,34 +2,65 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>我的第一個網站</title>
+  <title>左右欄位資訊移動</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 100px;
-      background-color: #f0f0f0;
+      padding: 40px;
+      background-color: #f5f5f5;
     }
-    h1 {
-      color: #333;
+    .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
+    .column {
+      width: 45%;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      min-height: 200px;
+    }
+    .item {
+      background-color: #e0e0ff;
+      padding: 10px;
+      margin-bottom: 10px;
       cursor: pointer;
+      border-radius: 5px;
     }
-    button:hover {
-      background-color: #0056b3;
+    .item:hover {
+      background-color: #c0c0ff;
+    }
+    h2 {
+      margin-top: 0;
     }
   </style>
 </head>
 <body>
-  <h1>歡迎來到我的網站</h1>
-  <p>點擊下方按鈕進入主頁</p>
-  <button onclick="location.href='main.html'">進入主頁</button>
+
+  <h1>左右欄位資訊移動</h1>
+  <div class="container">
+    <div class="column" id="left">
+      <h2>左邊欄位</h2>
+      <div class="item" onclick="moveToRight(this)">資訊 A</div>
+      <div class="item" onclick="moveToRight(this)">資訊 B</div>
+      <div class="item" onclick="moveToRight(this)">資訊 C</div>
+    </div>
+    <div class="column" id="right">
+      <h2>右邊欄位</h2>
+    </div>
+  </div>
+
+  <script>
+    function moveToRight(element) {
+      document.getElementById('right').appendChild(element);
+      element.onclick = () => moveToLeft(element);
+    }
+    function moveToLeft(element) {
+      document.getElementById('left').appendChild(element);
+      element.onclick = () => moveToRight(element);
+    }
+  </script>
+
 </body>
 </html>
