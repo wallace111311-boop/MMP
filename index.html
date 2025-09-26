@@ -42,9 +42,6 @@
   <div class="container">
     <div class="column" id="left">
       <h2>左邊欄位</h2>
-      <div class="item" onclick="moveToRight(this)">資訊 A</div>
-      <div class="item" onclick="moveToRight(this)">資訊 B</div>
-      <div class="item" onclick="moveToRight(this)">資訊 C</div>
     </div>
     <div class="column" id="right">
       <h2>右邊欄位</h2>
@@ -52,14 +49,54 @@
   </div>
 
   <script>
+    const left = document.getElementById('left');
+    const right = document.getElementById('right');
+
+    const items = ['資訊 A', '資訊 B', '資訊 C'];
+
+    function createItem(text, isRight) {
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.textContent = text;
+      div.onclick = () => {
+        if (div.parentNode.id === 'left') {
+          moveToRight(div);
+        } else {
+          moveToLeft(div);
+        }
+        saveState();
+      };
+      (isRight ? right : left).appendChild(div);
+    }
+
     function moveToRight(element) {
-      document.getElementById('right').appendChild(element);
-      element.onclick = () => moveToLeft(element);
+      right.appendChild(element);
     }
+
     function moveToLeft(element) {
-      document.getElementById('left').appendChild(element);
-      element.onclick = () => moveToRight(element);
+      left.appendChild(element);
     }
+
+    function saveState() {
+      const leftItems = Array.from(left.querySelectorAll('.item')).map(el => el.textContent);
+      const rightItems = Array.from(right.querySelectorAll('.item')).map(el => el.textContent);
+      localStorage.setItem('leftItems', JSON.stringify(leftItems));
+      localStorage.setItem('rightItems', JSON.stringify(rightItems));
+    }
+
+    function loadState() {
+      const leftItems = JSON.parse(localStorage.getItem('leftItems'));
+      const rightItems = JSON.parse(localStorage.getItem('rightItems'));
+
+      if (leftItems || rightItems) {
+        if (leftItems) leftItems.forEach(text => createItem(text, false));
+        if (rightItems) rightItems.forEach(text => createItem(text, true));
+      } else {
+        items.forEach(text => createItem(text, false));
+      }
+    }
+
+    loadState();
   </script>
 
 </body>
